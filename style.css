@@ -1,0 +1,40 @@
+.darkPrimaryColor {
+    background-color: #455A64
+}
+
+tbody {
+    display:block;
+    height:250px;
+    overflow:auto;
+}
+
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
+.schscroll::-webkit-scrollbar {
+    width: 6px;
+    cursor: pointer;
+}
+
+.schscroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+}
+
+th {
+    border-right: 1px solid rgba(160,160,160,0.2);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+td {
+    border-right: 1px solid rgba(160,160,160,0.2);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+.colorLetter {
+    color: white !important;
+    cursor: pointer;
+}

@@ -38,3 +38,13 @@ td {
     color: white !important;
     cursor: pointer;
 }
+
+.colorPage {
+    background-color: #26a69a !important;
+    color: white !important;
+}
+
+.colorPageErro {
+    background-color: #D50000 !important;
+    color: white !important;
+}

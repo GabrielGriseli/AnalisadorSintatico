@@ -214,14 +214,37 @@
                                 <div class="col s8 row">
                                     <div class="col s12">
                                         <div class="input-field">
-                                            <input id="password" type="text" class="validate" v-model="input">
-                                            <label for="password">Entrada</label>
+                                            <input id="inputId" type="text" class="validate" v-model="input" v-on:keyup="clearNotInput()">
+                                            <label for="inputId">Entrada</label>
                                         </div>
                                     </div>
                                     <div class="col s12">
                                         <a class="waves-effect waves-light btn" v-on:click="calcLine()" :disabled="!executionStatus"><i class="material-icons right">play_arrow</i>EXECUTAR</a>
                                         <a class="waves-effect waves-light btn" v-on:click="calcAll()" :disabled="!executionStatus"><i class="material-icons right">fast_forward</i>EXECUTAR TUDO</a>
                                         <a class="waves-effect red accent-4 btn" v-on:click="clear()"><i class="material-icons right">clear_all</i>LIMPAR ANALISADOR</a>
+                                    </div>
+
+
+
+
+
+                                    <div class="col s12">
+                                        <ul class="pagination">
+                                            <li class="disabled"><a href="#!">PILHA:</a></li>
+                                            <template v-for="elem in tape">
+                                                <template v-if="elem.recognized">
+                                                    <li style="margin-left: 3px" class="waves-effect"
+                                                    v-bind:class="{ active: elem.recognized, colorPage: elem.recognized}"><a href="#!">{{ elem.letter }}</a></li>
+                                                </template>
+                                                <template v-else-if="elem.recognized === false">
+                                                    <li style="margin-left: 3px" class="waves-effect"
+                                                    v-bind:class="{ active: !elem.recognized, colorPageErro: !elem.recognized}"><a href="#!">{{ elem.letter }}</a></li>
+                                                </template>
+                                                <template v-else>
+                                                    <li style="margin-left: 3px" class="waves-effect" ><a href="#!">{{ elem.letter }}</a></li>
+                                                </template>
+                                            </template>
+                                        </ul>
                                     </div>
 
                                     
@@ -345,7 +368,8 @@
                 },
                 pseudoInput: "",
                 line: 0,
-                random: false
+                random: false,
+                tape: []
             },
             updated: function () {
                 elem = document.querySelector(".scrollingContainer");
@@ -353,6 +377,15 @@
             },
             methods: {
                 calcFirstLine: function () {
+                    
+                    this.tape = [];
+                    for (letter of this.input) {
+                        this.tape.push({
+                            letter: letter,
+                            recognized: undefined
+                        });
+                    }
+
                     this.matrix.push({
                         stack: "$S",
                         input: this.input.trim() + "$",
@@ -406,6 +439,14 @@
                     } else if (!this.verifyIfLetterIsUpperCase(lastInTheStack)) {
                         if (lastInTheStack === firstInTheInput) {
                             this.matrix[indexLastLine].action = lastInTheStack;
+
+                            for (elem of this.tape) {
+                                if (elem.recognized  === undefined) {
+                                    elem.recognized = true;
+                                    break;
+                                }
+                            }
+
                         } else {
                             this.matrix[indexLastLine].action = false;
                             this.executionStatus = false;
@@ -417,6 +458,15 @@
                     } else {
                         this.matrix[indexLastLine].action = false;
                         this.executionStatus = false;
+                    }
+
+                    if (!this.executionStatus) {
+                        for (elem of this.tape) {
+                                if (elem.recognized  === undefined) {
+                                    elem.recognized = false;
+                                    break;
+                                }
+                            }
                     }
 
                     if (this.all && this.executionStatus) {
@@ -437,6 +487,13 @@
                     this.input = "";
                     this.matrix = [];
                     this.all = false;
+                    this.tape = [];
+                },
+                clearNotInput: function () {
+                    this.executionStatus = true;
+                    this.matrix = [];
+                    this.all = false;
+                    this.tape = [];
                 },
 
 
@@ -498,7 +555,10 @@
                     }
                 },
                 sendToAnalysis: function() {
+                    this.clear();
                     this.input = this.pseudoInput;
+                    document.getElementById("inputId").value = this.pseudoInput;
+                    M.updateTextFields();
                     this.pseudoInput = "";
                     this.line = 0;
                     this.random = false;
@@ -520,8 +580,6 @@
                         ["aA", "bCb"],
                         ["cA", "ε"]
                     ];
-                    console.log("opa")
-                    console.log(matrix[this.line][Math.floor(Math.random() * matrix[this.line].length)])
 
                     this.makeInput(matrix[this.line][Math.floor(Math.random() * matrix[this.line].length)], this.line);
                 }

@@ -25,13 +25,13 @@ thead, tbody tr {
 }
 
 th {
-    border-right: 1px solid rgba(160,160,160,0.2);
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+    border-right: 1px solid #9e9e9e;
+    border-bottom: 1px solid #9e9e9e;
 }
 
 td {
-    border-right: 1px solid rgba(160,160,160,0.2);
-    border-bottom: 1px solid rgba(0,0,0,0.12);
+    border-right: 1px solid #9e9e9e;
+    border-bottom: 1px solid #9e9e9e;
 }
 
 .colorLetter {
